@@ -3,7 +3,9 @@ class model{
   function get_title(){
     return "Passman";
   }
-
+  function help_message(){
+    return "Enter a keyword that you can easily remember as a passphrase and a number as the pincode";
+  }
   function initiating_form(){
     $form_data = array(
       array(
@@ -58,9 +60,10 @@ class view{
 				);
 		return $form_element;
 	}
-	function generate_form($title, $form_data, $error="", $phrase=""){
+	function generate_form($title, $form_data, $error="", $help=""){
 
 		$form = $this->get_html("h2", $title);
+    $form .= $this->get_html("p", $help);
 		foreach ($form_data as $form_element) {
 			if($error != ""){
 				foreach ($error as $key => $val) {
@@ -109,7 +112,9 @@ class controller{
       $appView->print_header($appModel->get_title());
       $appView->generate_form(
         $appModel->get_title(),
-        $appModel->initiating_form()
+        $appModel->initiating_form(),
+        "",
+        $appModel->help_message()
      );
    }else if(isset($_GET['phrase']) && isset($_GET['pincode'])){
      require './generate_password.php';
@@ -121,7 +126,9 @@ class controller{
      $appView->show_password($appModel->get_title(), $passwords[$num-1]);
      $appView->generate_form(
        $appModel->get_title(),
-       $appModel->initiating_form()
+       $appModel->initiating_form(),
+       "",
+       $appModel->help_message()
     );
 
     }else{
